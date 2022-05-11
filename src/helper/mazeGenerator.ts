@@ -40,26 +40,17 @@ export class MazeGenerator {
         }
         stack.push(randomSelect);
 
+        // Draw to board
         window.requestAnimationFrame(() => {
           this.maze.fireUpdateEvent();
         });
         await this.sleep();
-
-        // drawMazeTable(this.maze);
-
-        // alert(
-        //   `Next: [${stack
-        //     .map(({ x, y }) => `(${x}, ${y})`)
-        //     .join(", ")}]\nSelected: ${randomSelect.x}, ${randomSelect.y}`
-        // );
       }
     }
-
-    // console.log(queue);
   }
 
   async sleep() {
-    return new Promise((resolve) => setTimeout(resolve, 20));
+    return new Promise((resolve) => setTimeout(resolve, 2));
   }
 
   getAvailableNeighbors(point: Point): Point[] {
@@ -84,7 +75,8 @@ export class MazeGenerator {
 
       if (
         this.isSafe(newPos) &&
-        this.maze.maze[newPos.y][newPos.x] === 1 &&
+        (this.maze.maze[newPos.y][newPos.x] === 1 ||
+          getRndInteger(0, 12) === 1) &&
         !this.listVisited[JSON.stringify(newPos)]
       ) {
         res.push(newPos);
@@ -106,17 +98,6 @@ const getRandomItem = <T>(items: T[]) => {
 
 const isEqual = <T>(a: T, b: T) => JSON.stringify(a) === JSON.stringify(b);
 
-const drawMazeTable = (maze: Maze) => {
-  console.log("Draw");
-  window.requestAnimationFrame(() => {
-    for (let y = 0; y < maze.h; y++) {
-      for (let x = 0; x < maze.w; x++) {
-        const block = document.getElementById(`b_${x}_${y}`);
-        if (block) {
-          block.style.background =
-            maze.maze[y][x] === 1 ? "rgb(55, 65, 81)" : "rgb(243, 244, 246)";
-        }
-      }
-    }
-  });
-};
+function getRndInteger(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}

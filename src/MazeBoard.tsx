@@ -17,15 +17,23 @@ const MazeBoard: React.FC<IMazeProps> = ({ maze }) => {
     };
   }, []);
 
+  const boardWidth = 700;
+  const blockSize = boardWidth / maze.w;
+
   return (
-    <div>
+    <div
+      style={{
+        width: boardWidth + "px",
+      }}
+    >
       {matrix.map((cols, y) => (
-        <div className="flex" key={y}>
+        <div className="flex w-full" key={y}>
           {cols.map((cell, x) => (
             <Block
               id={`b_${x}_${y}`}
               key={`cell-${y}-${x}`}
               val={cell}
+              size={blockSize}
               onChange={() => {
                 maze.setBlock({ x, y }, 1);
               }}
@@ -42,18 +50,23 @@ export default MazeBoard;
 const Block: React.FC<{
   val: MazeItemValue;
   id: string;
+  size: number;
   onChange?: () => void;
-}> = ({ val, id, onChange }) => {
+}> = ({ val, id, size, onChange }) => {
   return (
     <div
       className={cn(
-        "w-2 h-2 border-l border-solid border-b  cursor-pointer border-y-gray-300",
+        "border-l border-solid border-b  cursor-pointer border-y-gray-300",
         val === 0 && "bg-gray-100 hover:bg-gray-200",
         val === 1 && "bg-gray-700"
       )}
       id={id}
       onMouseEnter={(e) => {
         if (globalThis.isMouseDown) onChange?.();
+      }}
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
       }}
       onMouseDown={onChange}
     ></div>
