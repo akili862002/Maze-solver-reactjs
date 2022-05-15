@@ -78,7 +78,7 @@ const Block: React.FC<{
         val === 2 && "bg-red-500",
         val === POINT.VISITED && "bg-green-200",
         val === POINT.SOLVED &&
-          "bg-green-700 border-l-green-700 border-b-green-700"
+          "bg-green-500 border-l-green-500 border-b-green-500"
       )}
       id={id}
       onMouseEnter={(e) => {

@@ -73,13 +73,9 @@ export class Maze {
   generateRandomMaze() {
     this.initMaze();
     new MazeGenerator(this);
-
-    // for (let y = 0; y < this.h; y++) {
-    //   for (let x = 0; x < this.w; x++) {
-    //     this.maze[x][y] = genMaze.maze[y][x][0] === "wall" ? 1 : 0;
-    //   }
-    // }
-    this.fireUpdateEvent();
+    window.requestAnimationFrame(() => {
+      this.fireUpdateEvent();
+    });
   }
 
   getMaze() {
