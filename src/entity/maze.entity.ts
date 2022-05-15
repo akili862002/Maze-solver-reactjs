@@ -1,20 +1,20 @@
 import { MazeGenerator } from "../helper/mazeGenerator";
+import { POINT, Point } from "./point.entity";
 
-export type Point = { x: number; y: number; mx?: number; my?: number };
 /**
  * 0 is empty
  * 1 is wall
  * -1 is start position
  * 2 is goal position
+ * 10 is Point in queue
  */
-export type MazeItemValue = 0 | 1 | -1 | 2;
 
 export class Maze {
   w: number;
   h: number;
-  maze: MazeItemValue[][] = [];
-  startPoint: Point = { x: 0, y: 0 };
-  goalPoint: Point = { x: 0, y: 0 };
+  maze: number[][] = [];
+  startPoint: Point | null = null;
+  goalPoint: Point | null = null;
   event = new CustomEvent("update");
 
   constructor(w: number, h: number) {
@@ -24,31 +24,42 @@ export class Maze {
   }
 
   setStartPoint(point: Point) {
+    this.setBlock(this.startPoint, 0, { updateEvent: false });
     this.startPoint = point;
-    this.maze[point.y][point.x] = -1;
-    this.fireUpdateEvent();
+    this.setBlock(point, POINT.START);
   }
 
   setGoalPoint(point: Point) {
+    this.setBlock(this.goalPoint, 0, { updateEvent: false });
     this.goalPoint = point;
-    this.maze[point.y][point.x] = 2;
-    this.fireUpdateEvent();
+    this.setBlock(point, 2);
   }
 
-  setBlock(point: Point, val: MazeItemValue) {
+  setBlock(
+    point: Point | null,
+    val: number,
+    option?: { updateEvent: boolean }
+  ) {
+    const { updateEvent = true } = option || {};
+    if (!point) return;
+
     if (this.maze[point.y][point.x] !== val) {
       this.maze[point.y][point.x] = val;
-      this.fireUpdateEvent();
+      if (updateEvent) this.fireUpdateEvent();
     }
   }
 
-  initMaze(defaultVal: MazeItemValue = 0) {
+  getBlock(point: Point) {
+    return this.maze[point.y][point.x];
+  }
+
+  initMaze(defaultVal = 0) {
     this.maze = JSON.parse(
       JSON.stringify(new Array(this.h).fill(new Array(this.w).fill(defaultVal)))
     );
     for (let y = 0; y < this.h; y++) {
-      this.maze[y][0] = 1;
-      this.maze[y][this.w - 1] = 1;
+      this.maze[y][0] = POINT.WALL;
+      this.maze[y][this.w - 1] = POINT.WALL;
     }
     for (let x = 0; x < this.w; x++) {
       this.maze[0][x] = 1;

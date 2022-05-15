@@ -1,6 +1,7 @@
 import cn from "classnames";
 import { useEffect } from "react";
-import { Maze, MazeItemValue } from "./entity/maze.entity";
+import { Maze } from "./entity/maze.entity";
+import { POINT, Point } from "./entity/point.entity";
 
 interface IMazeProps {
   maze: Maze;
@@ -8,6 +9,7 @@ interface IMazeProps {
 
 const MazeBoard: React.FC<IMazeProps> = ({ maze }) => {
   const matrix = maze.getMaze();
+
   useEffect(() => {
     document.body.onmousedown = () => {
       globalThis.isMouseDown = true;
@@ -31,11 +33,24 @@ const MazeBoard: React.FC<IMazeProps> = ({ maze }) => {
           {cols.map((cell, x) => (
             <Block
               id={`b_${x}_${y}`}
-              key={`cell-${y}-${x}`}
+              key={`cell-${y}-${x}-${cell}`}
               val={cell}
               size={blockSize}
               onChange={() => {
-                maze.setBlock({ x, y }, 1);
+                switch (globalThis.mouseMode) {
+                  case "CREATE_WALL":
+                    maze.setBlock(new Point(x, y), 1);
+                    break;
+                  case "BREAK_WALL":
+                    maze.setBlock(new Point(x, y), 0);
+                    break;
+                  case "CHOOSE_START":
+                    maze.setStartPoint(new Point(x, y));
+                    break;
+                  case "CHOOSE_GOAL":
+                    maze.setGoalPoint(new Point(x, y));
+                    break;
+                }
               }}
             />
           ))}
@@ -48,7 +63,7 @@ const MazeBoard: React.FC<IMazeProps> = ({ maze }) => {
 export default MazeBoard;
 
 const Block: React.FC<{
-  val: MazeItemValue;
+  val: number;
   id: string;
   size: number;
   onChange?: () => void;
@@ -56,9 +71,14 @@ const Block: React.FC<{
   return (
     <div
       className={cn(
-        "border-l border-solid border-b  cursor-pointer border-y-gray-300",
+        "border-l border-solid border-b cursor-pointer border-y-gray-300",
         val === 0 && "bg-gray-100 hover:bg-gray-200",
-        val === 1 && "bg-gray-700"
+        val === 1 && "bg-gray-700",
+        val === -1 && "bg-primary",
+        val === 2 && "bg-red-500",
+        val === POINT.VISITED && "bg-green-200",
+        val === POINT.SOLVED &&
+          "bg-green-700 border-l-green-700 border-b-green-700"
       )}
       id={id}
       onMouseEnter={(e) => {

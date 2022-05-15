@@ -1,4 +1,5 @@
-import { Maze, MazeItemValue, Point } from "../entity/maze.entity";
+import { Maze } from "../entity/maze.entity";
+import { Point } from "../entity/point.entity";
 
 export class MazeGenerator {
   maze: Maze = new Maze(0, 0);
@@ -8,10 +9,11 @@ export class MazeGenerator {
   constructor(maze: Maze) {
     this.maze = maze;
     this.mazeGenerator();
+    this.randomStartAndPoint();
   }
 
   async mazeGenerator() {
-    let startPoint: Point = { x: 1, y: 1 };
+    let startPoint = new Point(1, 1);
     let stack: Point[] = [startPoint];
     // let queue = [];
     this.maze.initMaze(1);
@@ -39,7 +41,9 @@ export class MazeGenerator {
           }
         }
         stack.push(randomSelect);
+        // alert(stack.map(({ x, y }) => `(${x},${y})`).join(", "));
 
+        continue;
         // Draw to board
         window.requestAnimationFrame(() => {
           this.maze.fireUpdateEvent();
@@ -51,6 +55,16 @@ export class MazeGenerator {
 
   async sleep() {
     return new Promise((resolve) => setTimeout(resolve, 2));
+  }
+
+  randomStartAndPoint() {
+    const { w, h } = this.maze;
+    this.maze.setStartPoint(
+      new Point(getRndInteger(1, w / 3), getRndInteger(1, h / 3))
+    );
+    this.maze.setGoalPoint(
+      new Point(getRndInteger(w / 6, w - 2), getRndInteger(h / 6, h - 2))
+    );
   }
 
   getAvailableNeighbors(point: Point): Point[] {
@@ -66,12 +80,12 @@ export class MazeGenerator {
       { x: -2, y: 0, mx: -1, my: 0 },
     ];
     for (const neb of neighbors) {
-      const newPos: Point = {
-        x: point.x + neb.x,
-        y: point.y + neb.y,
-        mx: point.x + neb.mx,
-        my: point.y + neb.my,
-      };
+      const newPos = new Point(
+        point.x + neb.x,
+        point.y + neb.y,
+        point.x + neb.mx,
+        point.y + neb.my
+      );
 
       if (
         this.isSafe(newPos) &&
@@ -99,5 +113,7 @@ const getRandomItem = <T>(items: T[]) => {
 const isEqual = <T>(a: T, b: T) => JSON.stringify(a) === JSON.stringify(b);
 
 function getRndInteger(min: number, max: number) {
+  min = Math.floor(min);
+  max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
 }
