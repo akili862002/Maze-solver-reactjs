@@ -24,7 +24,7 @@ const MazeBoard: React.FC<IMazeProps> = ({ maze }) => {
 
   return (
     <div
-      className="bg-gray-300"
+      className="bg-gray-200"
       style={{
         width: boardWidth + "px",
       }}
@@ -76,10 +76,10 @@ const Block: React.FC<{
         // "border-l border-solid border-b border-y-gray-300",
         val === 0 && " hover:bg-gray-200",
         val === 1 && "bg-gray-700",
-        val === -1 && "bg-primary",
+        val === -1 && "bg-blue-500",
         val === 2 && "bg-red-500",
-        val === POINT.VISITED && "bg-gray-500",
-        val === POINT.SOLVED && "bg-purple-500 "
+        val === POINT.VISITED && "bg-gray-400",
+        val === POINT.SOLVED && "bg-teal-300"
       )}
       id={id}
       onMouseEnter={(e) => {
