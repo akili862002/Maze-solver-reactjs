@@ -71,14 +71,14 @@ const Block: React.FC<{
   return (
     <div
       className={cn(
-        "border-l border-solid border-b cursor-pointer border-y-gray-300",
+        " cursor-pointer ",
+        // "border-l border-solid border-b border-y-gray-300",
         val === 0 && "bg-gray-100 hover:bg-gray-200",
         val === 1 && "bg-gray-700",
         val === -1 && "bg-primary",
         val === 2 && "bg-red-500",
         val === POINT.VISITED && "bg-green-200",
-        val === POINT.SOLVED &&
-          "bg-green-500 border-l-green-500 border-b-green-500"
+        val === POINT.SOLVED && "bg-purple-500 "
       )}
       id={id}
       onMouseEnter={(e) => {
