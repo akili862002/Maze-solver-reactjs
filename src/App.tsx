@@ -67,6 +67,10 @@ function App() {
     setMaze(maze);
   };
 
+  const handleResetSolve = () => {
+    maze.resetSolve();
+  };
+
   return (
     <div className="relative w-screen min-h-screen p-5">
       <h1 className="mb-1 text-4xl font-bold">Maze solver simulation</h1>
@@ -140,7 +144,7 @@ function App() {
                 variant="warning"
                 disabled={isSolving}
                 className="w-full"
-                onClick={handleReset}
+                onClick={handleResetSolve}
               >
                 Reset solve
               </Button>

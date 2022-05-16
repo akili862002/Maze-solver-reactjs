@@ -16,7 +16,7 @@ const MazeBoard: React.FC<IMazeProps> = ({ maze }) => {
     maze.onUpdate(() => {
       rerender();
     });
-  }, [maze]);
+  }, []);
 
   console.log("Render");
 

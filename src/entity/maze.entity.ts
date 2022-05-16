@@ -80,6 +80,16 @@ export class Maze {
     return this.maze;
   }
 
+  resetSolve() {
+    this.maze.forEach((row) => {
+      for (let i = 0; i < row.length; i++) {
+        if (![POINT.WALL, POINT.GOAL, POINT.NODE, POINT.START].includes(row[i]))
+          row[i] = 0;
+      }
+    });
+    this.fireUpdateEvent();
+  }
+
   onUpdate(cb: () => void) {
     document.addEventListener("update", cb);
   }
