@@ -46,6 +46,7 @@ function App() {
   console.log("Parent render");
 
   const handleSolve = async () => {
+    maze.resetSolve();
     setIsSolving(true);
     switch (algorithmsSelected.type) {
       case "BFS": {
@@ -86,7 +87,9 @@ function App() {
               options={sizeOptions}
               renderOption={(option) => `${option.width} x ${option.height}`}
               isEqual={(a, b) => a.width === b.width}
-              onSelect={(option) => setSizeSelected(option)}
+              onSelect={(option) => {
+                setSizeSelected(option);
+              }}
             />
             <div className="flex gap-1 ">
               <Button

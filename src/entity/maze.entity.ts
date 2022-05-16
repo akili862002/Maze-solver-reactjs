@@ -87,6 +87,10 @@ export class Maze {
           row[i] = 0;
       }
     });
+    if (this.startPoint && this.goalPoint) {
+      this.setStartPoint(this.startPoint);
+      this.setGoalPoint(this.goalPoint);
+    }
     this.fireUpdateEvent();
   }
 

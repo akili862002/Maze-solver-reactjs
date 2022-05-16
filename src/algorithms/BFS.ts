@@ -12,8 +12,6 @@ export class BFS {
       return alert("Please set Goal and Start point!");
 
     const queue: Point[] = [this.maze.startPoint];
-    // if (this.maze.)
-    // this.maze.setBlock(this.maze.startPoint, POINT.VISITED);
 
     while (queue.length) {
       const currPoint: Point = queue.shift() as any;
