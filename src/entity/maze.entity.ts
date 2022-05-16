@@ -73,9 +73,7 @@ export class Maze {
   generateRandomMaze() {
     this.initMaze();
     new MazeGenerator(this);
-    window.requestAnimationFrame(() => {
-      this.fireUpdateEvent();
-    });
+    this.fireUpdateEvent();
   }
 
   getMaze() {
@@ -87,6 +85,8 @@ export class Maze {
   }
 
   fireUpdateEvent() {
-    document.dispatchEvent(this.event);
+    window.requestAnimationFrame(() => {
+      document.dispatchEvent(this.event);
+    });
   }
 }

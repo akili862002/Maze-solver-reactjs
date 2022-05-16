@@ -2,6 +2,7 @@ import cn from "classnames";
 import { useEffect } from "react";
 import { Maze } from "./entity/maze.entity";
 import { POINT, Point } from "./entity/point.entity";
+import { useRerender } from "./hooks/useRerender";
 
 interface IMazeProps {
   maze: Maze;
@@ -9,6 +10,15 @@ interface IMazeProps {
 
 const MazeBoard: React.FC<IMazeProps> = ({ maze }) => {
   const matrix = maze.getMaze();
+  const rerender = useRerender();
+
+  useEffect(() => {
+    maze.onUpdate(() => {
+      rerender();
+    });
+  }, [maze]);
+
+  console.log("Render");
 
   useEffect(() => {
     document.body.onmousedown = () => {
@@ -79,7 +89,7 @@ const Block: React.FC<{
         val === -1 && "bg-blue-500",
         val === 2 && "bg-red-500",
         val === POINT.VISITED && "bg-gray-400",
-        val === POINT.SOLVED && "bg-teal-300"
+        val === POINT.SOLVED && "bg-[#00ff7e]"
       )}
       id={id}
       onMouseEnter={(e) => {

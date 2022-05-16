@@ -29,7 +29,6 @@ const sizeOptions: ISizeOption[] = [9, 19, 29, 39, 49, 69, 99].map((s) => ({
 }));
 
 function App() {
-  const rerender = useRerender();
   const [sizeSelected, setSizeSelected] = useState<ISizeOption>(sizeOptions[4]);
   const [maze, setMaze] = useState(
     new Maze(sizeSelected.width, sizeSelected.height)
@@ -41,12 +40,10 @@ function App() {
   const [execInfo, setExecInfo] = useState<{ timeExec: number } | null>(null);
 
   useEffect(() => {
-    const maze = new Maze(sizeSelected.width, sizeSelected.height);
-    setMaze(maze);
-    maze.onUpdate(() => {
-      rerender();
-    });
+    handleReset();
   }, [sizeSelected]);
+
+  console.log("Parent render");
 
   const handleSolve = async () => {
     setIsSolving(true);
@@ -65,8 +62,14 @@ function App() {
     setIsSolving(false);
   };
 
+  const handleReset = () => {
+    const maze = new Maze(sizeSelected.width, sizeSelected.height);
+    setMaze(maze);
+  };
+
   return (
     <div className="relative w-screen min-h-screen p-5">
+      <h1 className="mb-1 text-4xl font-bold">Maze solver simulation</h1>
       <main>
         <div className="flex flex-row space-x-2">
           <div>
@@ -124,6 +127,24 @@ function App() {
             >
               Solve
             </Button>
+            <div className="flex gap-1">
+              <Button
+                variant="warning-secondary"
+                disabled={isSolving}
+                className="w-full"
+                onClick={handleReset}
+              >
+                Reset
+              </Button>
+              <Button
+                variant="warning"
+                disabled={isSolving}
+                className="w-full"
+                onClick={handleReset}
+              >
+                Reset solve
+              </Button>
+            </div>
           </div>
         </div>
       </main>
