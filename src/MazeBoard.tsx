@@ -1,8 +1,8 @@
-import cn from "classnames";
 import { useEffect } from "react";
 import { Maze } from "./entity/maze.entity";
 import { POINT, Point } from "./entity/point.entity";
 import { useRerender } from "./hooks/useRerender";
+import cn from "classnames";
 
 interface IMazeProps {
   maze: Maze;
@@ -17,8 +17,6 @@ const MazeBoard: React.FC<IMazeProps> = ({ maze }) => {
       rerender();
     });
   }, []);
-
-  console.log("Render");
 
   useEffect(() => {
     document.body.onmousedown = () => {
@@ -35,6 +33,7 @@ const MazeBoard: React.FC<IMazeProps> = ({ maze }) => {
   return (
     <div
       className="bg-gray-200"
+      id="maze-board"
       style={{
         width: boardWidth + "px",
       }}
@@ -82,14 +81,15 @@ const Block: React.FC<{
   return (
     <div
       className={cn(
-        " cursor-pointer ",
+        " cursor-pointer relative",
         // "border-l border-solid border-b border-y-gray-300",
         val === 0 && " hover:bg-gray-200",
         val === 1 && "bg-gray-700",
-        val === -1 && "bg-blue-500",
-        val === 2 && "bg-red-500",
         val === POINT.VISITED && "bg-gray-400",
-        val === POINT.SOLVED && "bg-[#00ff7e]"
+        val === POINT.SOLVED && "bg-[#00ff7e]",
+
+        val === -1 && "bg-blue-500 ",
+        val === 2 && "bg-red-500"
       )}
       id={id}
       onMouseEnter={(e) => {
@@ -100,6 +100,18 @@ const Block: React.FC<{
         height: `${size}px`,
       }}
       onMouseDown={onChange}
-    ></div>
+    >
+      {(val === POINT.START || val === POINT.GOAL) && (
+        <>
+          <div
+            className={cn(
+              "absolute inline-flex w-full z-50 h-full animate-ping",
+              val === -1 && "bg-blue-500 ",
+              val === 2 && "bg-red-500"
+            )}
+          ></div>
+        </>
+      )}
+    </div>
   );
 };

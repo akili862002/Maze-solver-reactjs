@@ -2,7 +2,7 @@ import { Maze } from "../entity/maze.entity";
 import { POINT, Point } from "../entity/point.entity";
 import { Base } from "./Base";
 
-export class DFS extends Base {
+export class Greedy extends Base {
   constructor(maze: Maze) {
     super(maze);
   }
@@ -28,6 +28,11 @@ export class DFS extends Base {
         neighbor.parent = currPoint;
         stack.push(neighbor);
       }
+
+      // Greedy
+      stack.sort(
+        (a, b) => this.getDistanceToGoal(b) - this.getDistanceToGoal(a)
+      );
 
       // Draw to board
       window.requestAnimationFrame(() => {});

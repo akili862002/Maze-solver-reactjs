@@ -1,33 +1,43 @@
 import { Maze } from "../entity/maze.entity";
 import { POINT, Point } from "../entity/point.entity";
-import { Base } from "./Base";
+import { Greedy } from "./Greedy";
 
-export class DFS extends Base {
+export class AStar extends Greedy {
   constructor(maze: Maze) {
     super(maze);
   }
 
-  async solve() {
+  async solve(): Promise<void> {
     if (!this.maze.startPoint || !this.maze.goalPoint)
       return alert("Please set Goal and Start point!");
 
-    const stack: Point[] = [this.maze.startPoint];
+    const { startPoint, goalPoint } = this.maze;
 
-    while (stack.length) {
-      const currPoint: Point = stack.pop() as any;
+    const queue: Point[] = [startPoint];
 
-      if (this.maze.goalPoint.isEqual(currPoint)) {
-        this.maze.goalPoint.parent = currPoint;
+    while (queue.length) {
+      const currPoint: Point = queue.shift() as any;
+
+      if (goalPoint.isEqual(currPoint)) {
+        goalPoint.parent = currPoint;
         break;
       }
 
       const neighbors = this.getAvailableNeighbors(currPoint);
       for (const neighbor of neighbors) {
-        if (this.maze.goalPoint.isEqual(neighbor) === false)
+        if (goalPoint.isEqual(neighbor) === false)
           this.maze.setBlock(neighbor, POINT.VISITED);
         neighbor.parent = currPoint;
-        stack.push(neighbor);
+        neighbor.level = currPoint.level + 1;
+        neighbor.score = this.func(neighbor);
+
+        queue.push(neighbor);
       }
+
+      //   queue.sort((a, b) => b.score - a.score);
+      queue.sort((a, b) => a.score - b.score);
+
+      //   alert(queue.map(({ x, y, score }) => `(${x}, ${y}):${score}`).join(", "));
 
       // Draw to board
       window.requestAnimationFrame(() => {});
@@ -57,5 +67,17 @@ export class DFS extends Base {
     window.requestAnimationFrame(() => {
       this.maze.fireUpdateEvent();
     });
+  }
+
+  manhattan(point: Point) {
+    if (!this.maze.goalPoint) return Infinity;
+
+    const { x: x1, y: y1 } = point;
+    const { x: x2, y: y2 } = this.maze.goalPoint;
+    return Math.abs(x1 - x2) + Math.abs(y1 - y2);
+  }
+
+  func(point: Point) {
+    return point.level + this.manhattan(point);
   }
 }

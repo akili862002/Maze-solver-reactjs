@@ -1,4 +1,5 @@
 import cn from "classnames";
+import { ReactNode } from "react";
 
 export const Button: React.FC<
   {
@@ -9,13 +10,21 @@ export const Button: React.FC<
       | "warning"
       | "warning-secondary";
     disabled?: boolean;
+    icon?: ReactNode;
   } & React.HTMLAttributes<HTMLButtonElement>
-> = ({ className, disabled, children, variant = "primary", ...rest }) => {
+> = ({
+  className,
+  disabled,
+  children,
+  variant = "primary",
+  icon = null,
+  ...rest
+}) => {
   return (
     <button
       type="button"
       className={cn(
-        " rounded-5 focus:ring-4 font-semibold text-sm  px-2 py-1 focus:outline-none ",
+        " rounded-5 focus:ring-4 font-semibold text-sm  px-2 py-1 focus:outline-none flex flex-row gap-1 justify-center",
         variant === "primary" &&
           "text-white bg-blue-700 hover:bg-blue-800 focus:ring-blue-300",
         variant === "warning" &&
@@ -29,6 +38,7 @@ export const Button: React.FC<
       )}
       {...rest}
     >
+      {icon}
       {children}
     </button>
   );

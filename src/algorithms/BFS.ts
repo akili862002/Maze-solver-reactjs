@@ -1,10 +1,10 @@
 import { Maze } from "../entity/maze.entity";
 import { POINT, Point } from "../entity/point.entity";
+import { Base } from "./Base";
 
-export class BFS {
-  maze: Maze = new Maze(0, 0);
+export class BFS extends Base {
   constructor(maze: Maze) {
-    this.maze = maze;
+    super(maze);
   }
 
   async solve() {
@@ -57,44 +57,5 @@ export class BFS {
     window.requestAnimationFrame(() => {
       this.maze.fireUpdateEvent();
     });
-  }
-
-  async sleep() {
-    return new Promise((resolve) => setTimeout(resolve, 5));
-  }
-
-  getAvailableNeighbors(point: Point): Point[] {
-    const res: Point[] = [];
-    const neighbors = [
-      // top
-      { x: 0, y: -1 },
-      // right
-      { x: 1, y: 0 },
-      // bottom
-      { x: 0, y: 1 },
-      // left
-      { x: -1, y: 0 },
-    ];
-    for (const neb of neighbors) {
-      const newPos = new Point(point.x + neb.x, point.y + neb.y);
-      if (this.isSafe(newPos) && this.maze.getBlock(newPos) !== POINT.VISITED) {
-        res.push(newPos);
-      }
-    }
-
-    return res;
-  }
-
-  isSafe(point: Point) {
-    const { x, y } = point;
-    const val = this.maze.getBlock(point);
-    return (
-      (x > 0 &&
-        x < this.maze.w - 1 &&
-        y > 0 &&
-        y < this.maze.h - 1 &&
-        val === 0) ||
-      val === 2
-    );
   }
 }

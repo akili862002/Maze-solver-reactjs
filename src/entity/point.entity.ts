@@ -5,6 +5,8 @@ export class Point {
   my?: number;
   visited?: boolean;
   parent?: Point;
+  score: number = 0;
+  level: number = 0;
 
   constructor(x: number, y: number, mx?: number, my?: number) {
     this.x = x;
