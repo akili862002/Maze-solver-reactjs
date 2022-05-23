@@ -268,7 +268,7 @@ const HomePage: React.FC = () => {
               Save
             </Button>
 
-            {listStoredMaze.length && (
+            {listStoredMaze.length > 0 && (
               <div>
                 <h2 className="mb-1 text-lg font-bold">Stored maps</h2>
                 <div className="grid w-full grid-cols-3 gap-2">
