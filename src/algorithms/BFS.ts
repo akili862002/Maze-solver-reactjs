@@ -8,12 +8,13 @@ export class BFS extends Base {
   }
 
   async solve() {
-    if (!this.maze.startPoint || !this.maze.goalPoint)
-      return alert("Please set Goal and Start point!");
+    if (!this.maze.startPoint || !this.maze.goalPoint) return;
 
     const queue: Point[] = [this.maze.startPoint];
 
     while (queue.length) {
+      if (globalThis.isForceStop) return;
+
       const currPoint: Point = queue.shift() as any;
 
       if (this.maze.goalPoint.isEqual(currPoint)) {

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { Maze } from "./entity/maze.entity";
-import { POINT, Point } from "./entity/point.entity";
-import { useRerender } from "./hooks/useRerender";
+import { Maze } from "../../entity/maze.entity";
+import { POINT, Point } from "../../entity/point.entity";
+import { useRerender } from "../../hooks/useRerender";
 import cn from "classnames";
 
 interface IMazeProps {

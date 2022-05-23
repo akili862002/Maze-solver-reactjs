@@ -8,14 +8,15 @@ export class AStar extends Greedy {
   }
 
   async solve(): Promise<void> {
-    if (!this.maze.startPoint || !this.maze.goalPoint)
-      return alert("Please set Goal and Start point!");
+    if (!this.maze.startPoint || !this.maze.goalPoint) return;
 
     const { startPoint, goalPoint } = this.maze;
 
     const queue: Point[] = [startPoint];
 
     while (queue.length) {
+      if (globalThis.isForceStop) return;
+
       const currPoint: Point = queue.shift() as any;
 
       if (goalPoint.isEqual(currPoint)) {

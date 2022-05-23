@@ -21,6 +21,7 @@ module.exports = {
   darkMode: "class",
   theme: {
     screens: {
+      lg: "1000px",
       md: "800px",
       sm: "600px",
     },
@@ -70,6 +71,7 @@ module.exports = {
       sm: "0px 5px 19px rgba(17, 12, 46, 0.23)",
     },
     maxWidth: {
+      lg: "1000px",
       md: "800px",
       sm: "600px",
       45: "450px",
